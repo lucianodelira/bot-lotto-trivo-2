@@ -1,148 +1,157 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Bolão Loteria Federal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="Styles.css" />
-  <style>
-    body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:0 }
-    header { background:#1d3557; color:#fff; padding:15px; text-align:center }
-    .container { padding:20px; max-width:900px; margin:auto }
-    .card { background:#fff; padding:20px; border-radius:10px; margin-bottom:20px }
-    input, button { padding:10px; width:100%; margin-top:10px }
-    button { background:#1d3557; color:#fff; border:none; border-radius:6px; cursor:pointer }
-    button:disabled { background:#999 }
-    .stats { display:flex; justify-content:space-between; gap:10px }
-    .stats div { flex:1; background:#e9ecef; padding:10px; border-radius:8px; text-align:center }
-    ul { list-style:none; padding:0 }
-    li { padding:8px; border-bottom:1px solid #ddd }
-    .hidden { display:none }
-  </style>
-</head>
-<body>
-<header>
-  <h1>🎟️ Bolão da Loteria Federal</h1>
-  <p>Valor da cota: R$ 18,00 | Total: 200 cotas</p>
-</header>
-
-<div class="container">
-
-  <div class="card" id="registerCard">
-    <h2>Entrar no Bolão</h2>
-    <input type="text" id="name" placeholder="Seu nome completo" />
-    <input type="tel" id="phone" placeholder="Seu telefone (WhatsApp)" />
-    <button onclick="startPayment()">Gerar PIX e Participar</button>
-  </div>
-
-  <div class="card">
-    <h3>Status do Bolão</h3>
-    <div class="stats">
-      <div>
-        <strong id="freeCotas">200</strong><br />Disponíveis
-      </div>
-      <div>
-        <strong id="usedCotas">0</strong><br />Ocupadas
-      </div>
-      <div>
-        <strong>200</strong><br />Total
-      </div>
-    </div>
-  </div>
-
-  <div class="card hidden" id="memberArea">
-    <h2>Bem-vindo ao Bolão</h2>
-    <p><strong>Nome:</strong> <span id="memberName"></span></p>
-    <p><strong>Telefone:</strong> <span id="memberPhone"></span></p>
-    <button onclick="showPalpites()">Ver meu bolão</button>
-  </div>
-
-  <div class="card hidden" id="palpitesArea">
-    <h3>Palpites do Bolão</h3>
-    <p>(Exemplo ilustrativo – números oficiais podem ser inseridos manualmente)</p>
-    <ul>
-      <li>Bilhete: 12345</li>
-      <li>Bilhete: 67890</li>
-      <li>Bilhete: 54321</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h3>👥 Participantes</h3>
-    <ul id="participantsList"></ul>
-  </div>
-
-</div>
-
-<script src="Modal.js"></script>
-<script src="Script.js"></script>
-<script>
-const MAX_COTAS = 200;
-
-function getParticipants() {
-  return JSON.parse(localStorage.getItem('participants') || '[]');
-}
-
-function saveParticipants(list) {
-  localStorage.setItem('participants', JSON.stringify(list));
-}
-
-function updateStats() {
-  const list = getParticipants();
-  document.getElementById('usedCotas').innerText = list.length;
-  document.getElementById('freeCotas').innerText = MAX_COTAS - list.length;
-  const ul = document.getElementById('participantsList');
-  ul.innerHTML = '';
-  list.forEach(p => {
-    const li = document.createElement('li');
-    li.textContent = p.name + ' - ' + p.phone;
-    ul.appendChild(li);
-  });
-}
-
-function startPayment() {
-  const name = document.getElementById('name').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  if (!name || !phone) {
-    alert('Preencha nome e telefone');
-    return;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lotto Trivo Analyzer</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: #0f0f0f;
+    color: #fff;
   }
-  localStorage.setItem('pendingUser', JSON.stringify({ name, phone }));
-  openPaymentModal();
+  .container { max-width: 1000px; margin: auto; }
+  h1 { text-align: center; margin-bottom: 8px; }
+  .status {
+    padding: 14px;
+    border-radius: 10px;
+    background: #1c1c1c;
+    margin-bottom: 14px;
+    line-height: 1.45;
+    font-size: 14px;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    margin: 5px 0;
+    border: 0;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    background: #2a2a2a;
+    color: #fff;
+  }
+  button:hover { background: #3a3a3a; }
+  .section { margin-top: 22px; }
+  .section-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #aaa;
+  }
+  .sugestao {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .sugestao .card {
+    background: #1a3a2a;
+    border: 1px solid #2d6a4f;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+  }
+  .card {
+    background: #1c1c1c;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .numero {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  .pequeno {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  .pos = await api('previsao');
+    mostrar('Análise atualizada.<br>Confira a sugestão e os rankings abaixo.');
+    mostrarPrevisao(r);
+  } catch (e) {
+    mostrar('Erro: ' + e.message);
+  }
 }
 
-function unlockAccess() {
-  const user = JSON.parse(localStorage.getItem('pendingUser'));
-  if (!user) return;
-  const list = getParticipants();
-  if (list.length >= MAX_COTAS) return;
-  list.push(user);
-  saveParticipants(list);
-  localStorage.setItem('member', JSON.stringify(user));
-  localStorage.removeItem('pendingUser');
+function mostrarPrevisao(r) {
+  document.getElementById('secao-resultados').style.display = 'none';
+
+  // Sugestão
+  const sugDiv = document.getElementById('sugestao');
+  sugDiv.innerHTML = '';
+  (r.sugestao || []).forEach((num, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="pequeno">Pos ' + (i + 1) + '</div><div class="numero">' + num + '</div>';
+    sugDiv.appendChild(card);
+  });
+  document.getElementById('secao-sugestao').style.display = 'block';
+
+  // Ranking Geral
+  const geralDiv = document.getElementById('ranking-geral');
+  geralDiv.innerHTML = '';
+  (r.ranking_geral || []).forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<div class="pequeno">#' + (i + 1) + '</div>' +
+      '<div class="numero">' + p.candidato + '</div>' +
+      '<div class="pequeno">Score: ' + p.pontuacao + '</div>' +
+      '<div class="pequeno">Freq: ' + p.frequencia + ' | Atraso: ' + p.atraso + '</div>';
+    geralDiv.appendChild(card);
+  });
+  document.getElementById('secao-geral').style.display = 'block';
+
+  // Por Posição
+  const posDiv = document.getElementById('por-posicao');
+  posDiv.innerHTML = '';
+  (r.por_posicao || []).forEach(item => {
+    const box = document.createElement('div');
+    box.className = 'posicao-box';
+    let html = '<div class="posicao-title">Posição ' + item.posicao + '</div><div class="candidatos">';
+    (item.candidatos || []).forEach(c => {
+      html += '<div class="candidato"><strong>' + c.candidato + '</strong> · ' +
+              c.pontuacao + ' pts · F:' + c.frequencia + ' A:' + c.atraso + '</div>';
+    });
+    html += '</div>';
+    box.innerHTML = html;
+    posDiv.appendChild(box);
+  });
+  document.getElementById('secao-posicao').style.display = 'block';
 }
 
-function loadMember() {
-  const member = JSON.parse(localStorage.getItem('member'));
-  if (!member) return;
-  document.getElementById('registerCard').classList.add('hidden');
-  document.getElementById('memberArea').classList.remove('hidden');
-  document.getElementById('memberName').innerText = member.name;
-  document.getElementById('memberPhone').innerText = member.phone;
+function esconderPrevisao() {
+  document.getElementById('secao-sugestao').style.display = 'none';
+  document.getElementById('secao-geral').style.display = 'none';
+  document.getElementById('secao-posicao').style.display = 'none';
+  document.getElementById('secao-resultados').style.display = 'block';
 }
 
-function showPalpites() {
-  document.getElementById('palpitesArea').classList.toggle('hidden');
+async function backtest() {
+  mostrar('Executando backtest...');
+  try {
+    const r = await api('backtest');
+    mostrar('🧪 BACKTEST<br><br>Testes: ' + (r.testes || 0) +
+            '<br>Acertos Top 10: ' + (r.acertos || 0) +
+            '<br>Taxa: ' + (r.taxa_acerto_top10 || 0) + '%');
+  } catch (e) {
+    mostrar('Erro no backtest: ' + e.message);
+  }
 }
 
-// Integração: quando o Script.js libera acesso
-if (localStorage.getItem('privilegeAccess') === 'true') {
-  unlockAccess();
-  localStorage.removeItem('privilegeAccess');
+function mostrar(texto) {
+  document.getElementById('status').innerHTML = texto;
 }
 
-updateStats();
-loadMember();
+status();
+carregar();
 </script>
 </body>
 </html>
