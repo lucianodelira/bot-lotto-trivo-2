@@ -35,7 +35,9 @@
     color: #fff;
   }
   button:hover { background: #3a3a3a; }
-  .section { margin-top: 22px; }
+  .section {
+    margin-top: 22px;
+  }
   .section-title {
     font-size: 16px;
     font-weight: bold;
@@ -72,7 +74,136 @@
     font-size: 12px;
     opacity: 0.7;
   }
-  .pos = await api('previsao');
+  .posicao-box {
+    background: #1c1c1c;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .posicao-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #4cc9f0;
+  }
+  .candidatos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .candidato {
+    background: #2a2a2a;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .candidato strong {
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>LOTTO TRIVO</h1>
+
+  <div class="status" id="status">Carregando...</div>
+
+  <button onclick="coletar()">🔄 Coletar resultados</button>
+  <button onclick="previsao()">📊 Atualizar análise</button>
+  <button onclick="backtest()">🧪 Testar estratégia</button>
+
+  <!-- SUGESTÃO DE JOGO -->
+  <div class="section" id="secao-sugestao" style="display:none;">
+    <div class="section-title">🎯 SUGESTÃO DE JOGO (próximo sorteio)</div>
+    <div class="sugestao" id="sugestao"></div>
+  </div>
+
+  <!-- RANKING GERAL -->
+  <div class="section" id="secao-geral" style="display:none;">
+    <div class="section-title">📈 RANKING GERAL (Top 15)</div>
+    <div class="grid" id="ranking-geral"></div>
+  </div>
+
+  <!-- POR POSIÇÃO -->
+  <div class="section" id="secao-posicao" style="display:none;">
+    <div class="section-title">🔢 RANKING POR POSIÇÃO</div>
+    <div id="por-posicao"></div>
+  </div>
+
+  <!-- RESULTADOS RECENTES (quando não está em modo previsão) -->
+  <div class="section" id="secao-resultados">
+    <div class="grid" id="resultados"></div>
+  </div>
+</div>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbwTGOPfILZKZcb36qioFeusblOE_7LRcAUNfq6tOmkpWgYRI0LHaroIkrSbyIiSn47M/exec';
+
+async function api(action) {
+  const url = API + '?action=' + encodeURIComponent(action);
+  const resposta = await fetch(url);
+  if (!resposta.ok) throw new Error('Erro HTTP ' + resposta.status);
+  const json = await resposta.json();
+  if (json.sucesso === false) throw new Error(json.erro || 'Erro na API');
+  return json;
+}
+
+async function status() {
+  try {
+    const r = await api('status');
+    document.getElementById('status').innerHTML =
+      '🟢 Sistema online<br>' + (r.hora || '');
+  } catch (e) {
+    document.getElementById('status').innerHTML =
+      '🔴 API indisponível<br><small>' + e.message + '</small>';
+  }
+}
+
+async function coletar() {
+  mostrar('Coletando Lotto Trivo...');
+  try {
+    const r = await api('coletar');
+    mostrar(
+      'Coleta concluída.<br>Encontrados: ' + (r.encontrados || 0) +
+      '<br>Gravados: ' + (r.gravados || 0)
+    );
+    carregar();
+  } catch (e) {
+    mostrar('Erro: ' + e.message);
+  }
+}
+
+async function carregar() {
+  try {
+    const r = await api('resultados');
+    esconderPrevisao();
+    const div = document.getElementById('resultados');
+    div.innerHTML = '';
+
+    if (!r.resultados || !r.resultados.length) {
+      div.innerHTML = '<div class="card">Nenhum resultado.</div>';
+      return;
+    }
+
+    r.resultados.forEach(concurso => {
+      (concurso.numeros || []).forEach((numero, pos) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML =
+          '<div class="pequeno">Posição ' + (pos + 1) + '</div>' +
+          '<div class="numero">' + numero + '</div>' +
+          '<div class="pequeno">' + (concurso.data || '') + ' ' + (concurso.hora || '') + '</div>';
+        div.appendChild(card);
+      });
+    });
+  } catch (e) {
+    mostrar('Erro ao carregar: ' + e.message);
+  }
+}
+
+async function previsao() {
+  mostrar('Calculando análise completa...');
+  try {
+    const r = await api('previsao');
     mostrar('Análise atualizada.<br>Confira a sugestão e os rankings abaixo.');
     mostrarPrevisao(r);
   } catch (e) {
@@ -81,20 +212,23 @@
 }
 
 function mostrarPrevisao(r) {
+  // Esconde resultados antigos
   document.getElementById('secao-resultados').style.display = 'none';
 
-  // Sugestão
+  // ===== SUGESTÃO DE JOGO =====
   const sugDiv = document.getElementById('sugestao');
   sugDiv.innerHTML = '';
   (r.sugestao || []).forEach((num, i) => {
     const card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = '<div class="pequeno">Pos ' + (i + 1) + '</div><div class="numero">' + num + '</div>';
+    card.innerHTML =
+      '<div class="pequeno">Pos ' + (i + 1) + '</div>' +
+      '<div class="numero">' + num + '</div>';
     sugDiv.appendChild(card);
   });
   document.getElementById('secao-sugestao').style.display = 'block';
 
-  // Ranking Geral
+  // ===== RANKING GERAL =====
   const geralDiv = document.getElementById('ranking-geral');
   geralDiv.innerHTML = '';
   (r.ranking_geral || []).forEach((p, i) => {
@@ -109,12 +243,13 @@ function mostrarPrevisao(r) {
   });
   document.getElementById('secao-geral').style.display = 'block';
 
-  // Por Posição
+  // ===== POR POSIÇÃO =====
   const posDiv = document.getElementById('por-posicao');
   posDiv.innerHTML = '';
   (r.por_posicao || []).forEach(item => {
     const box = document.createElement('div');
     box.className = 'posicao-box';
+
     let html = '<div class="posicao-title">Posição ' + item.posicao + '</div><div class="candidatos">';
     (item.candidatos || []).forEach(c => {
       html += '<div class="candidato"><strong>' + c.candidato + '</strong> · ' +
@@ -138,9 +273,12 @@ async function backtest() {
   mostrar('Executando backtest...');
   try {
     const r = await api('backtest');
-    mostrar('🧪 BACKTEST<br><br>Testes: ' + (r.testes || 0) +
-            '<br>Acertos Top 10: ' + (r.acertos || 0) +
-            '<br>Taxa: ' + (r.taxa_acerto_top10 || 0) + '%');
+    mostrar(
+      '🧪 BACKTEST<br><br>' +
+      'Testes: ' + (r.testes || 0) + '<br>' +
+      'Acertos Top 10: ' + (r.acertos || 0) + '<br>' +
+      'Taxa: ' + (r.taxa_acerto_top10 || 0) + '%'
+    );
   } catch (e) {
     mostrar('Erro no backtest: ' + e.message);
   }
@@ -150,6 +288,7 @@ function mostrar(texto) {
   document.getElementById('status').innerHTML = texto;
 }
 
+// Inicialização
 status();
 carregar();
 </script>
