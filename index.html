@@ -176,25 +176,43 @@ async function carregar() {
   try {
     const r = await api('resultados');
     esconderPrevisao();
+
     const div = document.getElementById('resultados');
     div.innerHTML = '';
 
     if (!r.resultados || !r.resultados.length) {
-      div.innerHTML = '<div class="card">Nenhum resultado.</div>';
+      div.innerHTML = '<div class="card">Nenhum resultado encontrado.<br>Clique em Coletar resultados.</div>';
       return;
     }
 
+    // Mostra quantos sorteios vieram
+    mostrar('Mostrando ' + r.resultados.length + ' sorteios mais recentes');
+
     r.resultados.forEach(concurso => {
+      // Cabeçalho do sorteio
+      const header = document.createElement('div');
+      header.style.gridColumn = '1 / -1';
+      header.style.margin = '12px 0 6px 0';
+      header.style.padding = '8px 12px';
+      header.style.background = '#252525';
+      header.style.borderRadius = '8px';
+      header.style.fontSize = '13px';
+      header.innerHTML = '🕐 ' + (concurso.data || '') + ' às ' + (concurso.hora || '');
+      div.appendChild(header);
+
+      // Números do sorteio
       (concurso.numeros || []).forEach((numero, pos) => {
+        if (!numero) return;
+
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML =
           '<div class="pequeno">Posição ' + (pos + 1) + '</div>' +
-          '<div class="numero">' + numero + '</div>' +
-          '<div class="pequeno">' + (concurso.data || '') + ' ' + (concurso.hora || '') + '</div>';
+          '<div class="numero">' + numero + '</div>';
         div.appendChild(card);
       });
     });
+
   } catch (e) {
     mostrar('Erro ao carregar: ' + e.message);
   }
