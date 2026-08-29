@@ -467,7 +467,7 @@ async function backtest() {
 async function verificarAcertos() {
   const box = document.getElementById('box-acertos');
   box.innerHTML = '<div class="empty">Verificando...</div>';
-  setStatus('Comparando atrasados e sugestão com o último sorteio...');
+  setStatus('Comparando atrasados (antes do sorteio) com o último resultado...');
 
   try {
     try { await api('coletar'); } catch (e) {}
@@ -481,7 +481,16 @@ async function verificarAcertos() {
     const s = r.resumo || {};
     let html = '';
 
-    html += `<div class="draw-header">🕐 ${formatarData(r.sorteio.data)} · ${r.sorteio.hora || ''} · ID ${r.sorteio.id || ''}</div>`;
+    // Cabeçalho do sorteio
+    html += `<div class="draw-header">🕐 ${r.sorteio.data || formatarData(r.sorteio.data)} · ${r.sorteio.hora || ''} · ID ${r.sorteio.id || ''}</div>`;
+
+    // Fonte da comparação
+    html += `<div class="draw-header" style="margin-top:8px;">
+      Fonte: <strong>${r.fonte || '-'}</strong>
+      ${r.snapshotEm ? ' · ' + r.snapshotEm : ''}
+      ${r.totalSorteiosAnalisados ? ' · Base: ' + r.totalSorteiosAnalisados + ' sorteios' : ''}
+    </div>`;
+
     html += `<div class="grid" style="margin:12px 0;">`;
     (r.sorteio.numeros || []).forEach((n, i) => {
       html += `<div class="card"><div class="rank">Pos ${i + 1}</div><div class="num">${n}</div></div>`;
@@ -509,9 +518,11 @@ async function verificarAcertos() {
       let h = `<div class="section"><div class="section-title">${titulo}</div><div class="grid">`;
       lista.forEach(a => {
         h += `<div class="card ${classe || ''}">
-          <div class="rank">${a.tipo || ''}</div>
+          <div class="rank">${a.tipo || ''}${a.posicao_ranking ? ' · #' + a.posicao_ranking : ''}</div>
           <div class="num">${a.valor}${a.centena ? ' → ' + a.centena : ''}</div>
-          <div class="meta">${a.atraso != null ? 'Atraso: ' + a.atraso : ''}
+          <div class="meta">
+            ${a.atraso != null ? 'Atraso: ' + a.atraso + ' sorteios<br>' : ''}
+            ${a.frequencia != null ? 'Freq: ' + a.frequencia + '<br>' : ''}
             ${a.posicao_sugestao ? 'Pos sugestão: ' + a.posicao_sugestao : ''}
           </div>
         </div>`;
@@ -536,14 +547,13 @@ async function verificarAcertos() {
     setStatus(
       total > 0
         ? `Acertos: M${s.milhar} C${s.centena} D${s.dezena} G${s.grupo} · Sug ${s.sugestao}/${s.sugestao_centena}`
-        : 'Nenhum acerto nos atrasados/sugestão neste sorteio'
+        : 'Nenhum acerto neste sorteio'
     );
   } catch (e) {
     box.innerHTML = `<div class="empty">Erro: ${e.message}</div>`;
     setStatus('Erro na verificação: ' + e.message, true);
   }
 }
-
 status();
 carregar();
 </script>
