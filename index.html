@@ -463,6 +463,67 @@ async function carregar() {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+async function carregarCentenas() {
+  try {
+    const r = await api('centenas');
+    const div = document.getElementById('lista-centenas');
+    div.innerHTML = '';
+
+    if (!r.centenas || !r.centenas.length) {
+      div.innerHTML = '<div class="empty">Nenhuma centena calculada.<br>Rode "Atualizar Centenas Quentes" na planilha.</div>';
+      return;
+    }
+
+    r.centenas.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="rank">#${c.posicao}</div>
+        <div class="num">${c.centena}</div>
+        <div class="meta">Atraso: ${c.atraso}<br>Freq: ${c.frequencia}<br>${c.ultimo_numero || ''}</div>
+      `;
+      div.appendChild(card);
+    });
+  } catch (e) {
+    document.getElementById('lista-centenas').innerHTML =
+      '<div class="empty">Erro ao carregar centenas.</div>';
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 async function previsao() {
   setStatus('Calculando análise estatística...');
   try {
@@ -559,32 +620,7 @@ carregarCentenas();
 
 
 
-async function carregarCentenas() {
-  try {
-    const r = await api('centenas');
-    const div = document.getElementById('lista-centenas');
-    div.innerHTML = '';
 
-    if (!r.centenas || !r.centenas.length) {
-      div.innerHTML = '<div class="empty">Nenhuma centena calculada.<br>Rode "Atualizar Centenas Quentes" na planilha.</div>';
-      return;
-    }
-
-    r.centenas.forEach(c => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="rank">#${c.posicao}</div>
-        <div class="num">${c.centena}</div>
-        <div class="meta">Atraso: ${c.atraso}<br>Freq: ${c.frequencia}<br>${c.ultimo_numero || ''}</div>
-      `;
-      div.appendChild(card);
-    });
-  } catch (e) {
-    document.getElementById('lista-centenas').innerHTML =
-      '<div class="empty">Erro ao carregar centenas.</div>';
-  }
-}
 
 
 
