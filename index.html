@@ -33,7 +33,6 @@
     flex-shrink: 0; box-shadow: 0 0 8px var(--success);
   }
   .status.error .dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
-
   .nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 14px; }
   @media (max-width: 640px) { .nav { grid-template-columns: repeat(3, 1fr); } }
   .nav-btn {
@@ -46,10 +45,8 @@
     background: linear-gradient(135deg, #1d4ed8, #2563eb);
     border-color: transparent; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
   }
-
   .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
   @media (max-width: 520px) { .actions { grid-template-columns: 1fr; } }
-
   .btn {
     border: none; border-radius: 12px; padding: 13px 12px; font-size: 13px; font-weight: 600;
     cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -61,7 +58,6 @@
   }
   .btn-secondary { background: var(--card); border: 1px solid var(--border); color: #fff; }
   .btn:active { transform: scale(0.98); }
-
   .subnav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
   @media (max-width: 520px) { .subnav { grid-template-columns: repeat(2, 1fr); } }
   .sub-btn {
@@ -75,17 +71,14 @@
   .sub-btn.active.centena { background: linear-gradient(135deg, #0891b2, #0e7490); }
   .sub-btn.active.dezena  { background: linear-gradient(135deg, #d97706, #b45309); }
   .sub-btn.active.grupo   { background: linear-gradient(135deg, #059669, #047857); }
-
   .panel { display: none; }
   .panel.active { display: block; }
   .section { margin-bottom: 22px; }
   .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
   .section-title { font-size: 15px; font-weight: 700; }
   .section-badge { font-size: 11px; background: #1e293b; color: var(--muted); padding: 3px 8px; border-radius: 20px; }
-
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
   .sugestao-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-
   .card {
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
     padding: 14px 10px; text-align: center;
@@ -93,14 +86,12 @@
   .card .rank { font-size: 11px; color: var(--muted); }
   .card .num { font-size: 22px; font-weight: 800; margin: 4px 0; }
   .card .meta { font-size: 11px; color: var(--muted); line-height: 1.4; }
-
   .sugestao-card {
     background: linear-gradient(160deg, #0f2a1f, #0c1f17);
     border: 1px solid var(--green-border); border-radius: 12px; padding: 12px 6px; text-align: center;
   }
   .sugestao-card .pos { font-size: 11px; color: #6ee7b7; font-weight: 600; }
   .sugestao-card .num { font-size: 18px; font-weight: 800; }
-
   .draw-header {
     grid-column: 1 / -1; background: #1a2332; border: 1px solid var(--border);
     border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--muted);
@@ -112,7 +103,6 @@
   .candidato strong { color: #fff; }
   .candidato span { color: var(--muted); font-size: 12px; }
   .empty { text-align: center; padding: 36px 16px; color: var(--muted); font-size: 14px; grid-column: 1 / -1; }
-
   .card.milhar  { border-color: #5b21b6; }
   .card.centena { border-color: #0e7490; }
   .card.dezena  { border-color: #b45309; }
@@ -121,7 +111,6 @@
   .card.centena .num { color: #67e8f9; }
   .card.dezena  .num { color: #fcd34d; }
   .card.grupo   .num { color: #6ee7b7; }
-
   .bar-row { display: grid; grid-template-columns: 90px 1fr 48px; align-items: center; gap: 10px; margin-bottom: 10px; }
   .bar-label { font-size: 12px; font-weight: 600; color: var(--muted); }
   .bar-track { height: 16px; background: #1a2332; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
@@ -132,7 +121,6 @@
   .bar-fill.grupo    { background: linear-gradient(90deg, #059669, #6ee7b7); }
   .bar-fill.sugestao { background: linear-gradient(90deg, #2563eb, #60a5fa); }
   .bar-pct { font-size: 12px; font-weight: 700; text-align: right; }
-
   .hist-card {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 12px; padding: 12px; margin-bottom: 10px; text-align: left;
@@ -149,12 +137,10 @@
     <div class="logo">ANALYZER</div>
     <h1>Lotto Trivo</h1>
   </div>
-
   <div class="status" id="status">
     <div class="dot"></div>
     <div>Carregando sistema...</div>
   </div>
-
   <div class="nav">
     <button class="nav-btn active" data-panel="painel-inicio" onclick="trocarPainel('painel-inicio', this)">🏠 Início</button>
     <button class="nav-btn" data-panel="painel-atrasados" onclick="trocarPainel('painel-atrasados', this)">⏳ Atrasados</button>
@@ -162,13 +148,11 @@
     <button class="nav-btn" data-panel="painel-resultados" onclick="trocarPainel('painel-resultados', this)">📋 Resultados</button>
     <button class="nav-btn" data-panel="painel-acertos" onclick="trocarPainel('painel-acertos', this)">✅ Acertos</button>
   </div>
-
   <div class="actions">
     <button class="btn btn-primary" onclick="coletar()">🔄 Coletar</button>
     <button class="btn btn-secondary" onclick="previsao()">📊 Análise</button>
     <button class="btn btn-secondary" onclick="backtest()">🧪 Backtest</button>
   </div>
-
   <!-- INÍCIO -->
   <div class="panel active" id="painel-inicio">
     <div class="section">
@@ -188,7 +172,6 @@
       <div class="grid" id="ranking-geral"></div>
     </div>
   </div>
-
   <!-- ATRASADOS -->
   <div class="panel" id="painel-atrasados">
     <div class="subnav">
@@ -210,7 +193,6 @@
       🔄 Atualizar atrasados
     </button>
   </div>
-
   <!-- ANÁLISE -->
   <div class="panel" id="painel-analise">
     <div class="section">
@@ -231,7 +213,6 @@
       <div id="por-posicao"></div>
     </div>
   </div>
-
   <!-- RESULTADOS -->
   <div class="panel" id="painel-resultados">
     <div class="section">
@@ -241,7 +222,6 @@
       </div>
     </div>
   </div>
-
   <!-- ACERTOS -->
   <div class="panel" id="painel-acertos">
     <div class="section">
@@ -259,7 +239,6 @@
         <div class="empty">Toque em <strong>Verificar agora</strong> após o sorteio.</div>
       </div>
     </div>
-
     <div class="section">
       <div class="section-header">
         <div class="section-title">📈 Taxa de acerto (últimas previsões)</div>
@@ -267,7 +246,6 @@
       </div>
       <div id="chart-taxas"></div>
     </div>
-
     <div class="section">
       <div class="section-header">
         <div class="section-title">🕘 Últimas 10 previsões</div>
@@ -281,12 +259,16 @@
     </div>
   </div>
 </div>
-
 <script>
 const API = 'https://script.google.com/macros/s/AKfycbyQpGrbaq8q8xUB6n2qT6tabyg7cJ6zdw3l1V5yb1ftKWy2Hl8s1YdCsYZ0ARu_kk4KHg/exec';
-
 let cacheAtrasados = null;
 let tipoAtrasadoAtual = 'milhar';
+
+/* ===== HORÁRIOS AUTOMÁTICOS ===== */
+const HORARIOS_VERIFICAR = [
+  '01:32', '05:32', '07:32', '09:32', '11:32',
+  '13:32', '15:32', '18:32', '20:32', '22:32'
+];
 
 async function api(action) {
   const url = API + '?action=' + encodeURIComponent(action);
@@ -469,7 +451,6 @@ function mostrarPrevisao(r) {
       el.appendChild(card);
     });
   });
-
   [document.getElementById('ranking-geral'), document.getElementById('ranking-geral-analise')].forEach(el => {
     if (!el) return;
     el.innerHTML = '';
@@ -481,10 +462,8 @@ function mostrarPrevisao(r) {
       el.appendChild(card);
     });
   });
-
   document.getElementById('secao-geral-home').style.display = 'block';
   document.getElementById('secao-geral').style.display = 'block';
-
   const posDiv = document.getElementById('por-posicao');
   posDiv.innerHTML = '';
   (r.por_posicao || []).forEach(item => {
@@ -540,12 +519,10 @@ async function carregarHistoricoPrevisoes() {
     if (chart) chart.innerHTML = renderBarrasTaxas(r.taxas || {});
     const badge = document.getElementById('badge-taxas');
     if (badge) badge.textContent = (r.fechados || 0) + ' fechadas';
-
     if (!r.itens || !r.itens.length) {
       if (box) box.innerHTML = '<div class="empty">Nenhuma previsão salva ainda.<br>Use <strong>Salvar previsão</strong> antes do sorteio.</div>';
       return;
     }
-
     box.innerHTML = '';
     r.itens.forEach(it => {
       const ac = it.acertos || {};
@@ -587,22 +564,24 @@ async function verificarAcertos() {
   const box = document.getElementById('box-acertos');
   box.innerHTML = '<div class="empty">Verificando...</div>';
   setStatus('Comparando atrasados com o último sorteio...');
-
   try {
-    try { await api('coletar'); } catch (e) {}
+    // Dispara a coleta em paralelo (não bloqueia tanto)
+    const coletaPromise = api('coletar').catch(() => null);
 
+    // Já chama a verificação enquanto a coleta roda
     const r = await api('verificar');
+
+    // Espera a coleta terminar (se ainda estiver rodando) só para não deixar lixo
+    await coletaPromise;
 
     // Compatível com resposta plana ou aninhada
     const sorteio = r.sorteio || (r.verificacao && r.verificacao.sorteio) || null;
     const s = r.resumo || (r.verificacao && r.verificacao.resumo) || {};
     const ac = r.acertos || (r.verificacao && r.verificacao.acertos) || {};
-
     if (!sorteio) {
       box.innerHTML = '<div class="empty">Nenhum sorteio encontrado. Colete resultados.</div>';
       return;
     }
-
     let html = '';
     html += `<div class="draw-header">🕐 ${sorteio.data || formatarData(sorteio.data)} · ${sorteio.hora || ''} · ID ${sorteio.id || ''}</div>`;
     html += `<div class="draw-header" style="margin-top:8px;">
@@ -610,13 +589,11 @@ async function verificarAcertos() {
       ${r.snapshotEm ? ' · ' + r.snapshotEm : ''}
       ${r.totalSorteiosAnalisados ? ' · Base: ' + r.totalSorteiosAnalisados + ' sorteios' : ''}
     </div>`;
-
     html += `<div class="grid" style="margin:12px 0;">`;
     (sorteio.numeros || []).forEach((n, i) => {
       html += `<div class="card"><div class="rank">Pos ${i + 1}</div><div class="num">${n}</div></div>`;
     });
     html += `</div>`;
-
     html += `
       <div class="section-header" style="margin-top:8px;">
         <div class="section-title">Resumo de acertos</div>
@@ -629,7 +606,6 @@ async function verificarAcertos() {
         <div class="card" style="border-color:#2563eb;"><div class="rank">Sugestão milhar</div><div class="num">${s.sugestao || 0}</div></div>
         <div class="card" style="border-color:#0891b2;"><div class="rank">Sugestão centena</div><div class="num">${s.sugestao_centena || 0}</div></div>
       </div>`;
-
     function bloco(titulo, lista, classe) {
       if (!lista || !lista.length) {
         return `<div class="section"><div class="section-title">${titulo}</div>
@@ -650,25 +626,20 @@ async function verificarAcertos() {
       h += `</div></div>`;
       return h;
     }
-
     html += bloco('🎯 Milhares atrasadas que saíram', ac.milhar, 'milhar');
     html += bloco('🔢 Centenas atrasadas que saíram', ac.centena, 'centena');
     html += bloco('📶 Dezenas atrasadas que saíram', ac.dezena, 'dezena');
     html += bloco('🎲 Grupos atrasados que saíram', ac.grupo, 'grupo');
     html += bloco('💡 Acertos da sugestão', ac.sugestao, '');
-
     box.innerHTML = html;
-
     const total =
       (s.milhar || 0) + (s.centena || 0) + (s.dezena || 0) +
       (s.grupo || 0) + (s.sugestao || 0) + (s.sugestao_centena || 0);
-
     setStatus(
       total > 0
         ? `Acertos: M${s.milhar || 0} C${s.centena || 0} D${s.dezena || 0} G${s.grupo || 0} · Sug ${s.sugestao || 0}/${s.sugestao_centena || 0}`
         : 'Nenhum acerto neste sorteio'
     );
-
     // Atualiza gráfico e lista
     carregarHistoricoPrevisoes();
   } catch (e) {
@@ -677,6 +648,63 @@ async function verificarAcertos() {
   }
 }
 
+/* ===== AGENDADOR AUTOMÁTICO ===== */
+function getHoraMinuto() {
+  const now = new Date();
+  return String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+}
+
+function getHoje() {
+  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
+function jaExecutou(tipo, horario) {
+  const chave = `auto_${tipo}_${getHoje()}_${horario}`;
+  return localStorage.getItem(chave) === '1';
+}
+
+function marcarExecutado(tipo, horario) {
+  const chave = `auto_${tipo}_${getHoje()}_${horario}`;
+  localStorage.setItem(chave, '1');
+}
+
+function checkSchedule() {
+  const hm = getHoraMinuto();
+
+  HORARIOS_VERIFICAR.forEach(horaVerificar => {
+    // Calcula 10 minutos antes
+    const [h, m] = horaVerificar.split(':').map(Number);
+    let salvarH = h;
+    let salvarM = m - 10;
+    if (salvarM < 0) {
+      salvarM += 60;
+      salvarH = (salvarH - 1 + 24) % 24;
+    }
+    const horaSalvar = String(salvarH).padStart(2, '0') + ':' + String(salvarM).padStart(2, '0');
+
+    // Salvar previsão (10 min antes)
+    if (hm === horaSalvar && !jaExecutou('salvar', horaSalvar)) {
+      marcarExecutado('salvar', horaSalvar);
+      setStatus(`⏰ Automático: salvando previsão (${horaSalvar})...`);
+      salvarPrevisaoAgora();
+    }
+
+    // Verificar acertos no horário exato
+    if (hm === horaVerificar && !jaExecutou('verificar', horaVerificar)) {
+      marcarExecutado('verificar', horaVerificar);
+      setStatus(`⏰ Automático: verificando acertos (${horaVerificar})...`);
+      verificarAcertos();
+    }
+  });
+}
+
+// Roda a cada 20 segundos (suficiente para pegar o minuto certo)
+setInterval(checkSchedule, 20000);
+
+// Também verifica logo ao carregar a página
+checkSchedule();
+
+// Inicialização normal
 status();
 carregar();
 </script>
